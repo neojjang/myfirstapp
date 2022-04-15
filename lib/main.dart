@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyFirstApp());
@@ -55,6 +58,8 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   List<int> tileNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 0];
 
   @override
@@ -64,11 +69,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
         title: const Text('슬라이드퍼즐'),
         actions: [
           IconButton(
-            onPressed: () => {},
+            onPressed: () => loadTileNumbers(),
             icon: const Icon(Icons.play_arrow),
           ),
           IconButton(
-            onPressed: () => {},
+            onPressed: () => saveTileNumbers(),
             icon: const Icon(Icons.save),
           ),
         ],
@@ -152,6 +157,24 @@ class _PuzzlePageState extends State<PuzzlePage> {
     setState(() {
       tileNumbers.shuffle();
     });
+  }
+
+  void saveTileNumbers() async {
+    final value = jsonEncode(tileNumbers);
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString('TILE_NUMBERS', value);
+  }
+
+  void loadTileNumbers() async {
+    final SharedPreferences prefs = await _prefs;
+    final value = prefs.getString('TILE_NUMBERS');
+    if (value != null) {
+      final numbers =
+          (jsonDecode(value) as List<dynamic>).map((e) => e as int).toList();
+      setState(() {
+        tileNumbers = numbers;
+      });
+    }
   }
 }
 
