@@ -136,7 +136,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
       case 4:
         return [1, 3, 5, 7].contains(indexOfTile);
       case 5:
-        return [4, 8].contains(indexOfTile);
+        return [2, 4, 8].contains(indexOfTile);
       case 6:
         return [3, 7].contains(indexOfTile);
       case 7:
