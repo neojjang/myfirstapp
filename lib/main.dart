@@ -58,9 +58,13 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   List<int> tileNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,12 +165,12 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
   void saveTileNumbers() async {
     final value = jsonEncode(tileNumbers);
-    final SharedPreferences prefs = await _prefs;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('TILE_NUMBERS', value);
   }
 
   void loadTileNumbers() async {
-    final SharedPreferences prefs = await _prefs;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final value = prefs.getString('TILE_NUMBERS');
     if (value != null) {
       final numbers =
